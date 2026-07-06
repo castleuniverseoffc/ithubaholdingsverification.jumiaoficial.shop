@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Lottery Quiz</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f3f5f8;
+  color: #111827;
+}
+
+.top-bar {
+  background: #061527;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 18px;
+  color: #fff;
+}
+
+.logo {
+  width: 92px;
+  height: 34px;
+  background: #fff;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #061527;
+  font-weight: 800;
+  font-size: 13px;
+}
+
+.login-btn {
+  background: #ffd000;
+  color: #061527;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.page {
+  max-width: 430px;
+  margin: 0 auto;
+  min-height: calc(100vh - 72px);
+  background: #fff;
+}
+
+.hero {
+  padding: 26px 20px;
+  text-align: center;
+}
+
+.hero-icon {
+  width: 90px;
+  height: 90px;
+  margin: 0 auto 18px;
+  border-radius: 50%;
+  background: #e60012;
+  border: 5px solid #061527;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  font-weight: 900;
+}
+
+h1 {
+  font-size: 24px;
+  margin: 8px 0;
+}
+
+p {
+  font-size: 14px;
+  line-height: 1.45;
+  color: #4b5563;
+}
+
+.card {
+  margin: 18px 20px;
+  padding: 22px;
+  border-radius: 16px;
+  background: #f9fafb;
+  box-shadow: 0 8px 22px rgba(0,0,0,0.08);
+}
+
+.step {
+  display: none;
+}
+
+.step.active {
+  display: block;
+}
+
+.question {
+  font-size: 20px;
+  font-weight: 800;
+  margin-bottom: 16px;
+}
+
+.option {
+  width: 100%;
+  padding: 15px;
+  border: 1px solid #d1d5db;
+  background: #fff;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  font-size: 15px;
+  cursor: pointer;
+  text-align: left;
+}
+
+.option:hover {
+  border-color: #061527;
+}
+
+input {
+  width: 100%;
+  padding: 15px;
+  border-radius: 10px;
+  border: 1px solid #cbd5e1;
+  font-size: 15px;
+  margin-bottom: 12px;
+}
+
+.primary {
+  width: 100%;
+  padding: 15px;
+  border: none;
+  background: #129447;
+  color: #fff;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.secondary {
+  width: 100%;
+  padding: 13px;
+  border: none;
+  background: #e5e7eb;
+  color: #111827;
+  border-radius: 10px;
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+.progress {
+  height: 8px;
+  background: #e5e7eb;
+  border-radius: 20px;
+  overflow: hidden;
+  margin: 0 20px 20px;
+}
+
+.progress span {
+  display: block;
+  height: 100%;
+  width: 0%;
+  background: #129447;
+  transition: 0.3s;
+}
+
+.result-box {
+  background: #ecfdf5;
+  border: 1px solid #86efac;
+  padding: 18px;
+  border-radius: 14px;
+  margin-top: 14px;
+}
+
+.footer {
+  text-align: center;
+  padding: 22px;
+  font-size: 12px;
+  color: #6b7280;
+}
+
+/* Age modal */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.78);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 99;
+  padding: 20px;
+}
+
+.age-box {
+  background: #fff;
+  max-width: 340px;
+  width: 100%;
+  border-radius: 12px;
+  padding: 22px;
+  text-align: center;
+}
+
+.age-circle {
+  width: 72px;
+  height: 72px;
+  background: #ed1b2f;
+  border: 4px solid #061527;
+  border-radius: 50%;
+  margin: 0 auto 16px;
+  color: #fff;
+  font-weight: 900;
+  font-size: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+</style>
+</head>
+
+<body>
+
+<div class="overlay" id="ageOverlay">
+  <div class="age-box">
+    <div class="age-circle">18+</div>
+    <h2>Age Verification</h2>
+    <p>This quiz is restricted to adults. By continuing, you confirm that you are 18 years of age or older.</p>
+    <button class="primary" onclick="enterSite()">✔ I am 18 or older — Enter</button>
+    <button class="secondary" onclick="exitSite()">I am under 18 — Exit</button>
+  </div>
+</div>
+
+<header class="top-bar">
+  <div class="logo">QUIZ</div>
+  <button class="login-btn">Sign In</button>
+</header>
+
+<main class="page">
+
+  <section class="hero">
+    <div class="hero-icon">?</div>
+    <h1>Quick Prize Quiz</h1>
+    <p>Answer a few simple questions to check your eligibility and continue to the next step.</p>
+  </section>
+
+  <div class="progress">
+    <span id="progressBar"></span>
+  </div>
+
+  <section class="card">
+
+    <div class="step active" id="step1">
+      <div class="question">Where are you currently located?</div>
+      <button class="option" onclick="saveAnswer('location','England')">England</button>
+      <button class="option" onclick="saveAnswer('location','Scotland')">Scotland</button>
+      <button class="option" onclick="saveAnswer('location','Wales')">Wales</button>
+      <button class="option" onclick="saveAnswer('location','Northern Ireland')">Northern Ireland</button>
+    </div>
+
+    <div class="step" id="step2">
+      <div class="question">How often do you play online games?</div>
+      <button class="option" onclick="saveAnswer('frequency','Daily')">Daily</button>
+      <button class="option" onclick="saveAnswer('frequency','Weekly')">Weekly</button>
+      <button class="option" onclick="saveAnswer('frequency','Rarely')">Rarely</button>
+      <button class="option" onclick="saveAnswer('frequency','First time')">First time</button>
+    </div>
+
+    <div class="step" id="step3">
+      <div class="question">What type of reward interests you most?</div>
+      <button class="option" onclick="saveAnswer('reward','Cash prize')">Cash prize</button>
+      <button class="option" onclick="saveAnswer('reward','Shopping voucher')">Shopping voucher</button>
+      <button class="option" onclick="saveAnswer('reward','Bonus entry')">Bonus entry</button>
+    </div>
+
+    <div class="step" id="step4">
+      <div class="question">Confirm your details</div>
+      <input id="nameInput" type="text" placeholder="Full name" />
+      <input id="emailInput" type="email" placeholder="Email address" />
+      <button class="primary" onclick="saveUserData()">Continue</button>
+    </div>
+
+    <div class="step" id="step5">
+      <div class="question">Eligibility Summary</div>
+      <p id="summaryText"></p>
+      <div class="result-box">
+        <strong>Status:</strong> Your answers have been successfully submitted.
+      </div>
+      <button class="primary" style="margin-top:16px;">Continue</button>
+    </div>
+
+  </section>
+
+  <footer class="footer">
+    Play responsibly. This page is a student quiz model and does not process real lottery entries.
+  </footer>
+
+</main>
+
+<script>
+let currentStep = 1;
+const totalSteps = 5;
+
+const quizData = {
+  location: "",
+  frequency: "",
+  reward: "",
+  name: "",
+  email: ""
+};
+
+function enterSite() {
+  document.getElementById("ageOverlay").style.display = "none";
+}
+
+function exitSite() {
+  document.body.innerHTML = "";
+  alert("Access restricted to users aged 18 or older.");
+}
+
+function updateProgress() {
+  const percent = ((currentStep - 1) / (totalSteps - 1)) * 100;
+  document.getElementById("progressBar").style.width = percent + "%";
+}
+
+function showStep(step) {
+  document.querySelectorAll(".step").forEach(el => el.classList.remove("active"));
+  document.getElementById("step" + step).classList.add("active");
+  updateProgress();
+}
+
+function saveAnswer(key, value) {
+  quizData[key] = value;
+  currentStep++;
+  showStep(currentStep);
+}
+
+function saveUserData() {
+  const name = document.getElementById("nameInput").value.trim();
+  const email = document.getElementById("emailInput").value.trim();
+
+  if (!name || !email) {
+    alert("Please complete all fields.");
+    return;
+  }
+
+  quizData.name = name;
+  quizData.email = email;
+
+  document.getElementById("summaryText").innerHTML =
+    "Thank you, <strong>" + quizData.name + "</strong>. " +
+    "You selected <strong>" + quizData.reward + "</strong>, " +
+    "you are located in <strong>" + quizData.location + "</strong>, " +
+    "and your gaming frequency is <strong>" + quizData.frequency + "</strong>.";
+
+  currentStep++;
+  showStep(currentStep);
+}
+
+updateProgress();
+</script>
+
+</body>
+</html>
